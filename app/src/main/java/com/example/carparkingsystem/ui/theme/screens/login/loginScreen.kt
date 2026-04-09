@@ -43,12 +43,13 @@ import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.carparkingsystem.R
+import com.example.carparkingsystem.navigation.ROUTE_DASHBOARD
 import com.example.carparkingsystem.navigation.ROUTE_LOGIN
 import com.example.carparkingsystem.navigation.ROUTE_REGISTER
 
 @Composable
 fun LoginScreen(navController: NavHostController) {
-    var username by remember { mutableStateOf("") }
+    var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
 
 
@@ -94,10 +95,10 @@ fun LoginScreen(navController: NavHostController) {
             color = Color.Black
         )
         OutlinedTextField(
-            value = username,
-            label = {Text(text = "Username")},
-            onValueChange = {username=it},
-            placeholder = {Text(text = "Please enter your username")},
+            value = email,
+            label = {Text(text = "Email")},
+            onValueChange = {email=it},
+            placeholder = {Text(text = "Please enter your email")},
             leadingIcon = { Icon(Icons.Default.Person, contentDescription = null)},
         )
 
@@ -109,8 +110,17 @@ fun LoginScreen(navController: NavHostController) {
             leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null)},
         )
 
-        Button(onClick = {}, colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)) {
-            Text(text = "Login", color = Color.Black)}
+        Button(
+            onClick = {
+                if (email.isNotEmpty() && password.isNotEmpty()) {
+                    navController.navigate(ROUTE_DASHBOARD){
+                        popUpTo(ROUTE_LOGIN) {inclusive = true }
+                    }
+                }
+            },
+            colors = ButtonDefaults.buttonColors(containerColor = Color.Yellow)) {
+            Text(text = "Login", color = Color.Black)
+        }
         Row (){
             Text(text = "Don't have an account ?", color = Color.Yellow)
 

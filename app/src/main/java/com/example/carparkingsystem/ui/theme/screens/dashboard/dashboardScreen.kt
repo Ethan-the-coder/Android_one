@@ -38,17 +38,22 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.example.carparkingsystem.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Dashboard( onLogoutClick:() -> Unit){
+fun Dashboard( navController: NavController, onLogoutClick:() -> Unit){
     val selectedItem = remember { mutableStateOf(0) }
+    val context = LocalContext.current
+
 
 
     Scaffold(
@@ -58,13 +63,14 @@ fun Dashboard( onLogoutClick:() -> Unit){
                     style = MaterialTheme.typography.headlineMedium,
                     fontWeight = FontWeight.Bold)
                         },
+
                 actions = { IconButton(onClick = onLogoutClick){
                     Icon(
                         imageVector = Icons.Default.ExitToApp,
-                        contentDescription = null,
+                        contentDescription = "Logout",
                         tint = MaterialTheme.colorScheme.error
-                    )
-                } },
+                    ) }
+                          },
 
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Color(0xFFF7FB),
@@ -210,5 +216,31 @@ fun Dashboard( onLogoutClick:() -> Unit){
 
 
 fun DashboardScreenPreview(){
-    Dashboard(onLogoutClick = {})
+    Dashboard(rememberNavController(),onLogoutClick = {})
 }
+
+
+
+//@Composable
+//fun ActionCard(
+//    title: String,
+//    icon: ImageVector,
+//    backgroundColor: Color,
+//    modifier: Modifier,
+//    onClick: () -> Unit
+//) {
+//    Card(
+//        modifier = modifier.height(120.dp).clickable { onClick() },
+//        shape = RoundedCornerShape(20.dp),
+//        colors = CardDefaults.cardColors(containerColor = backgroundColor)
+//    ) {
+//        Column(
+//            modifier = Modifier.fillMaxSize(),
+//            verticalArrangement = Arrangement.Center,
+//            horizontalAlignment = Alignment.CenterHorizontally
+//        ) {
+//            Icon(icon, contentDescription = null, tint = Color.White)
+//            Text(text = title, color = Color.White)
+//        }
+//    }
+//}

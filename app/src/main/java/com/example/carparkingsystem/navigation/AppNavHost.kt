@@ -1,18 +1,35 @@
 package com.example.carparkingsystem.navigation
 
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.carparkingsystem.data.AuthViewModel
+import com.example.carparkingsystem.ui.theme.screens.dashboard.Dashboard
 import com.example.carparkingsystem.ui.theme.screens.login.LoginScreen
 import com.example.carparkingsystem.ui.theme.screens.register.RegisterScreen
 
 @Composable
 fun AppNavHost(navController: NavHostController = rememberNavController(),
-               startDestination: String = ROUTE_REGISTER){
-    NavHost(navController = navController, startDestination = startDestination){
-        composable(ROUTE_REGISTER){ RegisterScreen(navController) }
-        composable(ROUTE_LOGIN){ LoginScreen(navController) }
+               startDestination: String = ROUTE_REGISTER)
+{
+    val authViewModel = AuthViewModel()
+    val context = LocalContext.current
+
+    NavHost(navController = navController, startDestination = startDestination) {
+        composable(ROUTE_REGISTER) { RegisterScreen(navController) }
+        composable(ROUTE_LOGIN) { LoginScreen(navController) }
+        composable(ROUTE_DASHBOARD) {
+            Dashboard(
+                navController,
+                onLogoutClick = {
+                    authViewModel.logout(context)
+                    navController.navigate(ROUTE_LOGIN) {
+                        popUpTo(ROUTE_DASHBOARD) { inclusive = true }
+                    }
+                })
+        }
     }
 }
