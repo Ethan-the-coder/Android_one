@@ -2,6 +2,7 @@
 package com.example.carparkingsystem.ui.theme.screens.register
 
 
+import android.R.attr.phoneNumber
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -13,12 +14,14 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.text.KeyboardOptions
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Email
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
+import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
@@ -43,6 +46,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -60,6 +64,7 @@ import com.example.carparkingsystem.navigation.ROUTE_LOGIN
 fun RegisterScreen(navController: NavController) {
     var username by remember { mutableStateOf("") }
     var email by remember { mutableStateOf("") }
+    var phoneNumber by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var confirmpassword by remember { mutableStateOf("") }
     val authViewModel: AuthViewModel = viewModel()
@@ -126,6 +131,14 @@ fun RegisterScreen(navController: NavController) {
             leadingIcon = { Icon(Icons.Default.Email, contentDescription = null) },
         )
         OutlinedTextField(
+            value = phoneNumber,
+            label = { Text(text = "Phone Number") },
+            keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
+            onValueChange = { phoneNumber = it },
+            placeholder = { Text(text = "Please enter your phone number") },
+            leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) }
+        )
+        OutlinedTextField(
             value = password,
             onValueChange = { password = it },
             label = { Text(text = "Password") },
@@ -144,6 +157,7 @@ fun RegisterScreen(navController: NavController) {
                 authViewModel.signup(
                     username = username,
                     email = email,
+                    phoneNumber = phoneNumber,
                     password = password,
                     confirmpassword = confirmpassword,
                     navController = navController,
@@ -151,7 +165,7 @@ fun RegisterScreen(navController: NavController) {
                 )
             },
             colors = ButtonDefaults.buttonColors(containerColor = Color.Cyan)) {
-                    Text(text = "Register", color = Color.Cyan)
+                    Text(text = "Register", color = Color.Black)
             }
 
             Row() {
