@@ -45,12 +45,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.carparkingsystem.R
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Dashboard( navController: NavController, onLogoutClick:() -> Unit){
+fun Dashboard(navController: NavHostController, onLogoutClick:() -> Unit){
     val selectedItem = remember { mutableStateOf(0) }
     val context = LocalContext.current
 
@@ -69,7 +70,9 @@ fun Dashboard( navController: NavController, onLogoutClick:() -> Unit){
                         imageVector = Icons.Default.ExitToApp,
                         contentDescription = "Logout",
                         tint = MaterialTheme.colorScheme.error
-                    ) }
+                    )
+                }
+
                           },
 
                 colors = TopAppBarDefaults.topAppBarColors(

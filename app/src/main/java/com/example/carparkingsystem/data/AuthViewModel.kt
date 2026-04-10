@@ -7,6 +7,7 @@ import android.content.Context
 import android.widget.Toast
 import androidx.lifecycle.ViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavHostController
 import com.example.carparkingsystem.models.UserModel
 import com.example.carparkingsystem.navigation.ROUTE_DASHBOARD
 import com.example.carparkingsystem.navigation.ROUTE_LOGIN
@@ -89,9 +90,13 @@ class AuthViewModel:ViewModel() {
                 Toast.makeText(context,task.exception?.message ?: "Login failed",
                     Toast.LENGTH_LONG).show()
             }}}
+
+    fun logout(navController: NavHostController, route: String) {
+        navController.navigate(route) {
+            popUpTo(0) {
+                inclusive = true
+            }
+        }
+    }
 }
 
-fun logout( context: Context) {
-
-
-}

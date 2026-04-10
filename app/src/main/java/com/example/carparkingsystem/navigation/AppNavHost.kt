@@ -2,6 +2,7 @@ package com.example.carparkingsystem.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
@@ -15,8 +16,8 @@ import com.example.carparkingsystem.ui.theme.screens.register.RegisterScreen
 fun AppNavHost(navController: NavHostController = rememberNavController(),
                startDestination: String = ROUTE_REGISTER)
 {
-    val authViewModel = AuthViewModel()
-    val context = LocalContext.current
+    val authViewModel : AuthViewModel = viewModel()
+
 
     NavHost(navController = navController, startDestination = startDestination) {
         composable(ROUTE_REGISTER) { RegisterScreen(navController) }
@@ -25,10 +26,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController(),
             Dashboard(
                 navController,
                 onLogoutClick = {
-                    authViewModel.logout(context)
-                    navController.navigate(ROUTE_LOGIN) {
-                        popUpTo(ROUTE_DASHBOARD) { inclusive = true }
-                    }
+                    authViewModel.logout(navController, ROUTE_LOGIN)
                 })
         }
     }
