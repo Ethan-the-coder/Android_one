@@ -50,14 +50,9 @@ dependencies {
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
 
-
-
     implementation("androidx.compose.material3:material3")
     implementation("androidx.compose.material:material-icons-core")
     implementation("androidx.compose.material:material-icons-extended")
-
-
-
 
     implementation(libs.androidx.compose.foundation.layout)
     implementation(libs.firebase.auth)
@@ -70,5 +65,8 @@ dependencies {
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
-    implementation("androidx.navigation:navigation-compose:2.8.4")
+
+    implementation("androidx.navigation:navigation-compose:2.8.4")//Navcontroller
+
+    implementation("io.coil-kt:coil-compose:2.0.0")//Imageattachment
 }

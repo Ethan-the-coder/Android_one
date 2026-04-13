@@ -10,7 +10,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Lock
 import androidx.compose.material.icons.filled.Person
@@ -67,7 +69,10 @@ fun LoginScreen(navController: NavHostController) {
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(
+        modifier = Modifier
+            .fillMaxSize()
+            . verticalScroll(rememberScrollState())
+            .background(
             Brush.radialGradient(colors = listOf(Color.Transparent,
                 Color.Gray
             ),
