@@ -91,7 +91,9 @@ class AuthViewModel:ViewModel() {
             }else{
                 Toast.makeText(context,task.exception?.message ?: "Login failed",
                     Toast.LENGTH_LONG).show()
-            }}}
+            }
+        }
+    }
 
     fun logout(navController: NavHostController, route: String) {
         navController.navigate(route) {

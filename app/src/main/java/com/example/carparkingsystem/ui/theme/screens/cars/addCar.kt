@@ -2,6 +2,7 @@ package com.example.carparkingsystem.ui.theme.screens.cars
 
 
 import android.net.Uri
+import android.widget.Toast
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
@@ -41,25 +42,34 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.modifier.modifierLocalOf
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.carparkingsystem.data.CarViewModel
 import com.example.carparkingsystem.navigation.ROUTE_DASHBOARD
 import com.example.carparkingsystem.navigation.ROUTE_LOGIN
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun AddCarScreen(){
+fun AddCarScreen( navController: NavController){
 
     var imageUri by remember { mutableStateOf<Uri?>(null) }
     val launcher = rememberLauncherForActivityResult(
         contract = ActivityResultContracts.GetContent()
     ) { uri : Uri? -> imageUri = uri }
-    var plateNumber by remember { mutableStateOf("") }
-    var vehicleType by remember { mutableStateOf("") }
-    var driverName by remember { mutableStateOf("") }
-    var phoneNumber by remember { mutableStateOf("") }
+    var plate_number by remember { mutableStateOf("") }
+    var vehicle_type by remember { mutableStateOf("") }
+    var driver_name by remember { mutableStateOf("") }
+    var phone_number by remember { mutableStateOf("") }
+    val carViewModel : CarViewModel = viewModel()
+    val context = LocalContext.current
+    var isError by remember { mutableStateOf(false) }
 
     Scaffold(
 
@@ -116,44 +126,62 @@ fun AddCarScreen(){
             }
 
             OutlinedTextField(
-                value = plateNumber,
+                value = plate_number,
                 label = { Text(text = "Number Plate") },
-                onValueChange = { plateNumber = it },
+                onValueChange = { plate_number = it
+                    isError = false},
                 placeholder = { Text(text = "Please enter your number plate") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = { Icon(Icons.Default.DirectionsCar, contentDescription = null) }
             )
             OutlinedTextField(
-                value = vehicleType,
-                onValueChange = { vehicleType = it },
+                value = vehicle_type,
+                onValueChange = { vehicle_type = it
+                    isError = false},
                 label = { Text(text = "Vehicle Type") },
                 placeholder = { Text(text = "Please input your vehicle type") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = { Icon(Icons.Default.ElectricCar, contentDescription = null) },
             )
             OutlinedTextField(
-                value = driverName,
-                onValueChange = { driverName = it },
+                value = driver_name,
+                onValueChange = { driver_name = it
+                    isError = false},
                 label = { Text(text = "Driver's Name") },
                 placeholder = { Text(text = "Please input your name") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = { Icon(Icons.Default.People, contentDescription = null) },
             )
             OutlinedTextField(
-                value = phoneNumber,
+                value = phone_number,
                 label = { Text(text = "Phone Number") },
                 keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Phone),
-                onValueChange = { phoneNumber = it },
+                onValueChange = { phone_number = it
+                    isError = false},
                 placeholder = { Text(text = "Please enter your phone number") },
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = { Icon(Icons.Default.Phone, contentDescription = null) }
             )
             Button(
                 onClick = {
-                    if (plateNumber.isNotEmpty() &&
-                        vehicleType.isNotEmpty() &&
-                        driverName.isNotEmpty() &&
-                        phoneNumber.isNotEmpty()) {
+                    carViewModel.uploadCar(
+                        imageUri,
+                        plate_number,
+                        vehicle_type,
+                        driver_name,
+                        phone_number,
+                        context,
+                        navController
+                    )
+                    if (plate_number.isBlank() &&
+                        vehicle_type.isBlank() &&
+                        driver_name.isBlank() &&
+                        phone_number.isBlank()) {
+                        isError = true
+                        Toast.makeText(context, "Please fill in all the fields required!!", Toast.LENGTH_SHORT)
+                            .show()
+                    } else{
+                        navController.navigate(ROUTE_DASHBOARD)
 
                     }
                 },
@@ -173,5 +201,5 @@ fun AddCarScreen(){
 @Preview(showBackground = true, showSystemUi = true )
 @Composable
 fun AddCarScreenPreview(){
-    AddCarScreen()
+    AddCarScreen(rememberNavController())
 }

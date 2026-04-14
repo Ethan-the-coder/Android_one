@@ -1,5 +1,6 @@
 package com.example.carparkingsystem.ui.theme.screens.login
 
+import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -35,6 +36,7 @@ import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
@@ -53,6 +55,8 @@ import com.example.carparkingsystem.navigation.ROUTE_REGISTER
 fun LoginScreen(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
+    val context = LocalContext.current
+    var isError by remember { mutableStateOf(false) }
 
 
 
@@ -102,14 +106,16 @@ fun LoginScreen(navController: NavHostController) {
         OutlinedTextField(
             value = email,
             label = {Text(text = "Email")},
-            onValueChange = {email=it},
+            onValueChange = {email=it
+                isError = false},
             placeholder = {Text(text = "Please enter your email")},
             leadingIcon = { Icon(Icons.Default.Person, contentDescription = null)},
         )
 
         OutlinedTextField(
             value = password,
-            onValueChange = {password=it},
+            onValueChange = {password=it
+                isError = false},
             label = {Text(text = "Password")},
             placeholder = {Text(text = "Enter your password")},
             leadingIcon = { Icon(Icons.Default.Lock, contentDescription = null)},
@@ -117,7 +123,11 @@ fun LoginScreen(navController: NavHostController) {
 
         Button(
             onClick = {
-                if (email.isNotEmpty() && password.isNotEmpty()) {
+                if (email.isBlank() && password.isBlank()) {
+                    isError = true
+                    Toast.makeText(context, "Please fill in all the fields!!", Toast.LENGTH_SHORT)
+                        .show()
+                } else{
                     navController.navigate(ROUTE_DASHBOARD){
                         popUpTo(ROUTE_LOGIN) {inclusive = true }
                     }
