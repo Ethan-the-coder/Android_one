@@ -31,11 +31,18 @@ class CarViewModel:ViewModel() {
         imageUri: Uri?,
         plate_number:String,
         vehicle_type:String,
+        car_color:String,
+        entryDateTime:String,
         driver_name:String,
         phone_number:String,
         context: Context,
         navController: NavController
     ){
+
+        val systemTime = java.text.SimpleDateFormat(
+            "dd/MM/yyyy HH:mm:ss",
+            java.util.Locale.getDefault()
+        ).format(java.util.Date())
 
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -45,6 +52,10 @@ class CarViewModel:ViewModel() {
                     "id" to ref.key,
                     "plate_number" to plate_number,
                     "vehicle_type" to vehicle_type,
+                    "car_color" to car_color,
+                    "entryDateTime" to entryDateTime,
+                    "user_selected_time" to entryDateTime, // What they keyed in
+                    "actual_system_time" to systemTime,
                     "driver_name" to driver_name,
                     "phone_number" to phone_number,
                     "imageUrl" to imageUrl

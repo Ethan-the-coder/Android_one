@@ -7,6 +7,7 @@ import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContract
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,17 +17,24 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.CalendarToday
 import androidx.compose.material.icons.filled.DirectionsCar
 import androidx.compose.material.icons.filled.ElectricCar
 import androidx.compose.material.icons.filled.Email
+import androidx.compose.material.icons.filled.Event
 import androidx.compose.material.icons.filled.Lock
+import androidx.compose.material.icons.filled.Palette
 import androidx.compose.material.icons.filled.People
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Phone
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.ExposedDropdownMenuBox
+import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
@@ -65,11 +73,17 @@ fun AddCarScreen( navController: NavController){
     ) { uri : Uri? -> imageUri = uri }
     var plate_number by remember { mutableStateOf("") }
     var vehicle_type by remember { mutableStateOf("") }
+    var car_color by remember { mutableStateOf("") }
     var driver_name by remember { mutableStateOf("") }
     var phone_number by remember { mutableStateOf("") }
     val carViewModel : CarViewModel = viewModel()
     val context = LocalContext.current
     var isError by remember { mutableStateOf(false) }
+    var expanded by remember { mutableStateOf(false) }
+    var selectedColor by remember { mutableStateOf("") }
+    val colorsList = listOf("White", "Black", "Silver", "Blue", "Red", "Grey")
+    var entryDateTime by remember { mutableStateOf("") }
+
 
     Scaffold(
 
@@ -143,6 +157,68 @@ fun AddCarScreen( navController: NavController){
                 modifier = Modifier.fillMaxWidth(),
                 leadingIcon = { Icon(Icons.Default.ElectricCar, contentDescription = null) },
             )
+
+
+            ExposedDropdownMenuBox(
+                expanded = expanded,
+                onExpandedChange = { expanded = !expanded },
+                modifier = Modifier.fillMaxWidth().padding(bottom = 16.dp)
+            ) {
+                OutlinedTextField(
+                    value = selectedColor,
+                    onValueChange = {car_color = it
+                        isError = false},
+                    readOnly = true, // Prevents typing; user must pick from the list
+                    label = { Text("Car Color") },
+                    placeholder = { Text("Select car color") },
+                    trailingIcon = {
+                        ExposedDropdownMenuDefaults.TrailingIcon(expanded = expanded)
+                    },
+                    modifier = Modifier.menuAnchor().fillMaxWidth(),
+                    leadingIcon = { Icon(Icons.Default.Palette, contentDescription = null) },
+                    colors = ExposedDropdownMenuDefaults.outlinedTextFieldColors()
+                )
+
+                ExposedDropdownMenu(
+                    expanded = expanded,
+                    onDismissRequest = { expanded = false }
+                ) {
+                    colorsList.forEach { colorOption ->
+                        DropdownMenuItem(
+                            text = { Text(colorOption) },
+                            onClick = {
+                                selectedColor = colorOption
+                                expanded = false
+                                isError = false
+                            }
+                        )
+                    }
+                }
+            }
+
+
+            OutlinedTextField(
+                value = entryDateTime,
+                onValueChange = { entryDateTime = it
+                                    isError = false },
+                label = { Text("Entry Date & Time") },
+                readOnly = true,
+                modifier = Modifier.fillMaxWidth()
+                    .clickable { showDateTimePicker(context) { it -> entryDateTime = it } }
+                    .padding(bottom = 16.dp),
+                leadingIcon = { Icon(Icons.Default.Event, contentDescription = null) },
+                trailingIcon = {
+                    IconButton(onClick = {
+                        // Logic to show DatePicker goes here
+                        showDateTimePicker(context) { it -> entryDateTime = it }
+                    }
+                    ) {
+                        Icon(Icons.Default.CalendarToday, contentDescription = "Select Date")
+                    }
+                }
+            )
+
+
             OutlinedTextField(
                 value = driver_name,
                 onValueChange = { driver_name = it
@@ -168,6 +244,8 @@ fun AddCarScreen( navController: NavController){
                         imageUri,
                         plate_number,
                         vehicle_type,
+                        car_color = selectedColor,
+                        entryDateTime,
                         driver_name,
                         phone_number,
                         context,
@@ -175,6 +253,8 @@ fun AddCarScreen( navController: NavController){
                     )
                     if (plate_number.isBlank() &&
                         vehicle_type.isBlank() &&
+                        car_color.isBlank() &&
+                        entryDateTime.isBlank() &&
                         driver_name.isBlank() &&
                         phone_number.isBlank()) {
                         isError = true
@@ -182,6 +262,8 @@ fun AddCarScreen( navController: NavController){
                             .show()
                     } else{
                         navController.navigate(ROUTE_DASHBOARD)
+                        Toast.makeText(context, "Car saved successfully!!", Toast.LENGTH_SHORT)
+                            .show()
 
                     }
                 },
@@ -202,4 +284,29 @@ fun AddCarScreen( navController: NavController){
 @Composable
 fun AddCarScreenPreview(){
     AddCarScreen(rememberNavController())
+}
+
+
+
+
+
+fun showDateTimePicker(context: android.content.Context, onDateTimeSelected: (String) -> Unit) {
+    val calendar = java.util.Calendar.getInstance()
+    android.app.DatePickerDialog(
+        context,
+        { _, year, month, day ->
+            android.app.TimePickerDialog(
+                context,
+                { _, hour, minute ->
+                    onDateTimeSelected("$day/${month + 1}/$year $hour:$minute")
+                },
+                calendar.get(java.util.Calendar.HOUR_OF_DAY),
+                calendar.get(java.util.Calendar.MINUTE),
+                true
+            ).show()
+        },
+        calendar.get(java.util.Calendar.YEAR),
+        calendar.get(java.util.Calendar.MONTH),
+        calendar.get(java.util.Calendar.DAY_OF_MONTH)
+    ).show()
 }
