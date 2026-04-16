@@ -209,7 +209,6 @@ fun AddCarScreen( navController: NavController){
                 leadingIcon = { Icon(Icons.Default.Event, contentDescription = null) },
                 trailingIcon = {
                     IconButton(onClick = {
-                        // Logic to show DatePicker goes here
                         showDateTimePicker(context) { it -> entryDateTime = it }
                     }
                     ) {

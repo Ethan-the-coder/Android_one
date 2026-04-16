@@ -9,6 +9,7 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
+import com.example.carparkingsystem.models.CarModel
 import com.example.carparkingsystem.navigation.ROUTE_DASHBOARD
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
@@ -42,7 +43,8 @@ class CarViewModel:ViewModel() {
         val systemTime = java.text.SimpleDateFormat(
             "dd/MM/yyyy HH:mm:ss",
             java.util.Locale.getDefault()
-        ).format(java.util.Date())
+        )
+            .format(java.util.Date())
 
         viewModelScope.launch (Dispatchers.IO){
             try {
@@ -54,7 +56,7 @@ class CarViewModel:ViewModel() {
                     "vehicle_type" to vehicle_type,
                     "car_color" to car_color,
                     "entryDateTime" to entryDateTime,
-                    "user_selected_time" to entryDateTime, // What they keyed in
+                    "user_selected_time" to entryDateTime,
                     "actual_system_time" to systemTime,
                     "driver_name" to driver_name,
                     "phone_number" to phone_number,
@@ -93,9 +95,32 @@ class CarViewModel:ViewModel() {
     }
 
 
+    private val _cars = mutableStateListOf<CarModel>()
+     val cars: List<CarModel> = _cars
+
+    fun fetchCar(context: Context){
+
+    val ref = FirebaseDatabase.getInstance().getReference("Cars")
+    ref.get()
+        .addOnSuccessListener{
+        snapshot ->
+        _cars.clear()
+        for (child in snapshot.children){
+            val car = child.getValue(CarModel::class.java)
+            car?.let{
+                it.id = child.key
+                _cars.add(it)
+            }
+        }
+    }
+        .addOnFailureListener{
+            Toast.makeText(context,"Failed to load cars",Toast.LENGTH_LONG).show()
+        }
 
 
 
-
-
+    }
 }
+
+
+

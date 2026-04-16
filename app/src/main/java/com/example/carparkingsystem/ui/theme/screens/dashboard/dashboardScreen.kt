@@ -54,6 +54,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.carparkingsystem.R
+import com.example.carparkingsystem.navigation.ROUTE_CAR
 import com.example.carparkingsystem.navigation.ROUTE_CARS
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -176,7 +177,7 @@ fun Dashboard(navController: NavHostController, onLogoutClick:() -> Unit){
                     icon = Icons.Default.DirectionsCar,
                     backgroundColor = Color(0xFF5F6368),
                     modifier = Modifier.weight(1f),
-                    onClick = { /* navigate to list */ }
+                    onClick = { navController.navigate(ROUTE_CAR)/* navigate to list */ }
                 )
 
 //                Card(
