@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.text.KeyboardOptions
+import androidx.compose.foundation.verticalScroll
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -69,6 +71,7 @@ fun RegisterScreen(navController: NavController) {
     var confirmpassword by remember { mutableStateOf("") }
     val authViewModel: AuthViewModel = viewModel()
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
 
 
     Box(modifier = Modifier.fillMaxSize()) {
@@ -82,11 +85,15 @@ fun RegisterScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxSize()
                 .background(Color.Gray.copy(alpha = 0.7f))
+
         )
     }
 
     Column(
-        modifier = Modifier.fillMaxSize().background(
+        modifier = Modifier
+            .fillMaxSize()
+            . verticalScroll(scrollState)
+            .background(
             Brush.radialGradient(
                 colors = listOf(
                     Color.Transparent,

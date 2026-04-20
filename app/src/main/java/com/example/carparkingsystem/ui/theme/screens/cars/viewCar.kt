@@ -52,15 +52,15 @@ import com.example.carparkingsystem.models.CarModel
 @Composable
 fun CarListScreen(
     navController: NavController,
-    cars: List<CarModel>,
-//    onFetchCar:() -> Unit
+    cars: List<CarModel>
+
 ) {
     val carViewModel: CarViewModel = viewModel()
     val cars = carViewModel.cars
     val context = LocalContext.current
     LaunchedEffect(Unit) {
         carViewModel.fetchCar(context)
-//        onFetchCar()
+
     }
 
     LazyColumn(

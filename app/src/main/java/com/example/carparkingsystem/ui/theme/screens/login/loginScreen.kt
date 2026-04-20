@@ -56,6 +56,7 @@ fun LoginScreen(navController: NavHostController) {
     var email by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     val context = LocalContext.current
+    val scrollState = rememberScrollState()
     var isError by remember { mutableStateOf(false) }
 
 
@@ -75,7 +76,7 @@ fun LoginScreen(navController: NavHostController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            . verticalScroll(rememberScrollState())
+            . verticalScroll(scrollState)
             .background(
             Brush.radialGradient(colors = listOf(Color.Transparent,
                 Color.Gray
