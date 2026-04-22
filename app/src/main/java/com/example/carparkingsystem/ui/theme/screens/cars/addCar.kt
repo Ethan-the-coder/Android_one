@@ -250,7 +250,7 @@ fun AddCarScreen( navController: NavController){
                         context,
                         navController
                     )
-                    if (plate_number.isBlank() &&
+                     if (plate_number.isBlank() &&
                         vehicle_type.isBlank() &&
                         car_color.isBlank() &&
                         entryDateTime.isBlank() &&

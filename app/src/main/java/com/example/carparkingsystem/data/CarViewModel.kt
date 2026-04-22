@@ -11,6 +11,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.navigation.NavController
 import com.example.carparkingsystem.models.CarModel
 import com.example.carparkingsystem.navigation.ROUTE_DASHBOARD
+import com.example.carparkingsystem.navigation.ROUTE_VIEW_CAR
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -116,10 +117,51 @@ class CarViewModel:ViewModel() {
         .addOnFailureListener{
             Toast.makeText(context,"Failed to load cars",Toast.LENGTH_LONG).show()
         }
-
-
-
     }
+
+    fun updateCar(
+        carId : String,
+        plate_number: String,
+        vehicle_type: String,
+        driver_name: String,
+        phone_number: String,
+        car_color: String,
+        entryDateTime: String,
+        imageUri: Uri?,
+        context: Context,
+        navController: NavController
+        ){
+        viewModelScope.launch (Dispatchers.IO){
+            try {
+                val imageUrl = imageUri?.let { uploadToCloudinary(context,it) }
+                val updateCar = mapOf(
+                    "id" to carId,
+                    "plate_number" to plate_number,
+                    "vehicle_type" to vehicle_type,
+                    "car_color" to car_color,
+                    "entryDateTime" to entryDateTime,
+                    "user_selected_time" to entryDateTime,
+                    "driver_name" to driver_name,
+                    "phone_number" to phone_number,
+                    "imageUrl" to imageUrl
+                )
+                val ref = FirebaseDatabase.getInstance()
+                    .getReference("Cars")
+                    .child(carId)
+                ref.setValue(updateCar).await()
+                fetchCar(context)
+                withContext(Dispatchers.Main){
+                    Toast.makeText(context,"Car Updated Successfully!", Toast.LENGTH_LONG).show()
+                    navController.navigate(ROUTE_VIEW_CAR)
+                }
+            } catch (e: Exception){
+                withContext(Dispatchers.Main){
+                    Toast.makeText(context, "Car Update Failed", Toast.LENGTH_LONG).show()
+                }
+            }
+        }
+    }
+
 }
 
 

@@ -163,7 +163,7 @@ fun CarCard(
                 horizontalArrangement = Arrangement.End
             ) {
                 TextButton(
-                    onClick = { navController.navigate("update_patient/${car.id}") }
+                    onClick = { navController.navigate("update_car/${car.id}") }
                 ) {
                     Text(
                         text = "Update",

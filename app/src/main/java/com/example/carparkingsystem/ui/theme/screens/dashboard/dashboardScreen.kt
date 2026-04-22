@@ -54,8 +54,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.rememberNavController
 import com.example.carparkingsystem.R
-import com.example.carparkingsystem.navigation.ROUTE_CAR
-import com.example.carparkingsystem.navigation.ROUTE_CARS
+import com.example.carparkingsystem.navigation.ROUTE_ADD_CAR
+import com.example.carparkingsystem.navigation.ROUTE_VIEW_CAR
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -170,14 +170,14 @@ fun Dashboard(navController: NavHostController, onLogoutClick:() -> Unit){
                     icon = Icons.Default.AddCircle,
                     backgroundColor = Color(0xFF6CABDD),
                     modifier = Modifier.weight(1f),
-                    onClick = { navController.navigate(ROUTE_CARS) }
+                    onClick = { navController.navigate(ROUTE_ADD_CAR) }
                 )
                 ActionCard(
                     title = "View Cars",
                     icon = Icons.Default.DirectionsCar,
                     backgroundColor = Color(0xFF5F6368),
                     modifier = Modifier.weight(1f),
-                    onClick = { navController.navigate(ROUTE_CAR)/* navigate to list */ }
+                    onClick = { navController.navigate(ROUTE_VIEW_CAR)/* navigate to list */ }
                 )
 
 //                Card(
