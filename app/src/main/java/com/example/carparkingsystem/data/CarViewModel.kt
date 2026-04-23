@@ -65,14 +65,14 @@ class CarViewModel:ViewModel() {
                 )
                 ref.setValue(carData).await()
                 withContext(Dispatchers.Main){
-                    Toast.makeText(context,"Car saved Successfully",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"Car saved Successfully!!",Toast.LENGTH_LONG).show()
                     navController.navigate(ROUTE_DASHBOARD)
                 }
 
             }
             catch (e: Exception){
                 withContext(Dispatchers.Main){
-                    Toast.makeText(context,"Car not saved",Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"Car not saved!!",Toast.LENGTH_LONG).show()
                 }
             }
         }
@@ -115,7 +115,7 @@ class CarViewModel:ViewModel() {
         }
     }
         .addOnFailureListener{
-            Toast.makeText(context,"Failed to load cars",Toast.LENGTH_LONG).show()
+            Toast.makeText(context,"Failed to load cars!!",Toast.LENGTH_LONG).show()
         }
     }
 
@@ -151,16 +151,26 @@ class CarViewModel:ViewModel() {
                 ref.setValue(updateCar).await()
                 fetchCar(context)
                 withContext(Dispatchers.Main){
-                    Toast.makeText(context,"Car Updated Successfully!", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context,"Car Updated Successfully!!", Toast.LENGTH_LONG).show()
                     navController.navigate(ROUTE_VIEW_CAR)
                 }
             } catch (e: Exception){
                 withContext(Dispatchers.Main){
-                    Toast.makeText(context, "Car Update Failed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "Car Update Failed!!", Toast.LENGTH_LONG).show()
                 }
             }
         }
     }
+
+    fun deleteCar(carId: String,context: Context){
+        val ref = FirebaseDatabase.getInstance().getReference("Cars").child(carId)
+        ref.removeValue().addOnSuccessListener {
+            _cars.removeAll{it.id == carId}
+        }.addOnFailureListener {
+            Toast.makeText(context, "Car not deleted!!", Toast.LENGTH_LONG).show()
+        }
+    }
+
 
 }
 

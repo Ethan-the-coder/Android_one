@@ -73,7 +73,7 @@ fun CarListScreen(
         items(cars) { car ->
             CarCard(
                 car = car,
-                onDelete = { },
+                onDelete = { carId -> carViewModel.deleteCar(carId,context) },
                 navController = navController
             )
         }

@@ -138,7 +138,7 @@ fun UpdateCarScreen(navController: NavController,carId:String) {
                 horizontalAlignment = Alignment.CenterHorizontally
             ) {
                 Text(
-                    text = "Update Car",
+                    text = "Update Car Details",
                     fontSize = 24.sp,
                     fontWeight = FontWeight.Bold,
                     color = Color(0xFF880E4F)
@@ -161,7 +161,7 @@ fun UpdateCarScreen(navController: NavController,carId:String) {
                     ) { targetUri ->
                         AsyncImage(
                             model = imageUri.value ?: car!!.imageUrl,
-                            contentDescription = "Patient Image",
+                            contentDescription = "Car Image",
                             contentScale = ContentScale.Crop,
                             modifier = Modifier.fillMaxSize()
                         )
