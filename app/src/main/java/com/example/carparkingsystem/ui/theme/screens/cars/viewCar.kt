@@ -188,8 +188,4 @@ fun CarCard(
     }
 }
 
-@Preview( showBackground = true, showSystemUi = true)
-@Composable
-fun CarListScreenPreview(){
-    CarListScreen(rememberNavController(),cars = listOf())
-}
+
