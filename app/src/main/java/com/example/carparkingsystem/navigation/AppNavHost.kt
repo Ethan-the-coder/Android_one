@@ -28,7 +28,7 @@ fun AppNavHost(navController: NavHostController = rememberNavController(),
         composable(ROUTE_REGISTER) { RegisterScreen(navController) }
         composable(ROUTE_LOGIN) { LoginScreen(navController) }
         composable(ROUTE_ADD_CAR) { AddCarScreen(navController) }
-        composable(ROUTE_VIEW_CAR) { CarListScreen(navController,cars = listOf()) }
+        composable(ROUTE_VIEW_CAR) { CarListScreen(navController) }
         composable(ROUTE_UPDATE_CAR,
             arguments = listOf(
                 navArgument("carId"){ type = NavType.StringType }

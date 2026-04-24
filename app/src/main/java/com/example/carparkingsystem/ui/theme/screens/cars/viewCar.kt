@@ -50,11 +50,7 @@ import com.example.carparkingsystem.models.CarModel
 
 
 @Composable
-fun CarListScreen(
-    navController: NavController,
-    cars: List<CarModel>
-
-) {
+fun CarListScreen(navController: NavController) {
     val carViewModel: CarViewModel = viewModel()
     val cars = carViewModel.cars
     val context = LocalContext.current

@@ -9,4 +9,6 @@ data class CarModel(
     var driver_name: String? = null,
     var phone_number: String? = null,
     var imageUrl: String? = null
-)
+){
+    constructor() : this(null,null,null,null,null,null,null,null)
+}

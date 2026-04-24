@@ -107,14 +107,17 @@ class CarViewModel:ViewModel() {
         snapshot ->
         _cars.clear()
         for (child in snapshot.children){
-            val car = child.getValue(CarModel::class.java)
-            car?.let{
-                it.id = child.key
-                _cars.add(it)
+            try {
+                val car = child.getValue(CarModel::class.java)
+                car?.let {
+                    it.id = child.key
+                    _cars.add(it)
+                }
+            } catch (e: Exception){
+                Log.e("FirebaseError", "Error parsing car : ${e.message}")
             }
         }
-    }
-        .addOnFailureListener{
+    }.addOnFailureListener{
             Toast.makeText(context,"Failed to load cars!!",Toast.LENGTH_LONG).show()
         }
     }
